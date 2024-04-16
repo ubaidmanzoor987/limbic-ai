@@ -1,16 +1,17 @@
 import express from "express";
-import Routes from "./interfaces/routes.interface";
+import Routes from "@interfaces/routes.interface";
 declare class App {
+    private port;
+    private env;
+    private appUrl;
     app: express.Application;
-    port: string | number;
-    env: string;
     constructor(routes: Routes[]);
-    listen(): void;
-    getServer(): express.Application;
     private connectToDatabase;
     private initializeMiddlewares;
     private initializeRoutes;
     private initializeErrorHandling;
     private initializeSwagger;
+    getServer(): express.Application;
+    listen(): void;
 }
 export default App;

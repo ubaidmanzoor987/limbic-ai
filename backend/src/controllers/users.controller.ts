@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 
 import UserService from "@/services/users.service";
 import { IUsers } from "@/interfaces/users.interface";
+import { CreateUserDto } from "@/dtos/users.dto";
+import { validate } from "class-validator";
 
 class UserController {
   private userService = new UserService();
@@ -55,11 +57,21 @@ class UserController {
   public createUser = async (req: Request, res: Response) => {
     const userData: Omit<IUsers, "id"> = req.body;
     try {
-      const newQuestion = await this.userService.createUser(userData);
+      const createUserDto = new CreateUserDto();
+      createUserDto.name = userData.name;
+
+      const errors = await validate(createUserDto);
+      if (errors.length > 0) {
+        res
+          .status(400)
+          .json({ message: "Validation failed", error: errors, data: {} });
+        return;
+      }
+      const newUser = await this.userService.createUser(userData);
       res.status(201).json({
         message: "success",
         error: null,
-        data: newQuestion,
+        data: newUser,
       });
     } catch (error) {
       console.log("Error in createUser handler", error.message);

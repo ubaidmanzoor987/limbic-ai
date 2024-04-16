@@ -22,15 +22,11 @@ import UsersController from "@/controllers/users.controller";
  *         id:
  *           type: string
  *           description: The unique identifier of the user
- *         email:
- *           type: string
- *           description: Email of the user
  *         name:
  *           type: string
  *           description: Name of the user
  *       example:
  *         id: 17b1bbad-d9b5-48dd-b582-3ec04dc7d5fc
- *         email: johndoe@example.com
  *         name: John Doe
  */
 
@@ -101,17 +97,11 @@ class UsersRoute implements Route {
      *             type: object
      *             required:
      *               - name
-     *               - email
      *             properties:
      *               name:
      *                 type: string
      *                 description: Name of the user
      *                 example: John Doe
-     *               email:
-     *                 type: string
-     *                 format: email
-     *                 description: Email of the user
-     *                 example: johndoe@example.com
      *     responses:
      *       201:
      *         description: User created successfully
@@ -145,17 +135,11 @@ class UsersRoute implements Route {
      *             type: object
      *             required:
      *               - name
-     *               - email
      *             properties:
      *               name:
      *                 type: string
      *                 description: Name of the user
      *                 example: John Doe
-     *               email:
-     *                 type: string
-     *                 format: email
-     *                 description: Email of the user
-     *                 example: johndoe@example.com
      *     responses:
      *       200:
      *         description: The user was updated successfully

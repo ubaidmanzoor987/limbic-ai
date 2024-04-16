@@ -1,28 +1,25 @@
-# Common build stage
-FROM node:14.14.0-alpine3.12 as common-build-stage
+FROM node:16-alpine
 
-COPY . ./app
-
+# Set the working directory inside the container to /app
 WORKDIR /app
 
+# Copy package.json and package-lock.json (or yarn.lock) files into the container
+COPY package*.json ./
+
+# Install dependencies
 RUN npm install
 
-EXPOSE 3000
+# Copy the rest of application's code into the container
+COPY . ./app
 
-# Dvelopment build stage
-FROM common-build-stage as development-build-stage
+# Copy the .env file or any other configuration files you need
+COPY .env .
 
-RUN chmod +x /app/docker-entrypoint.sh
+# Building app
+RUN npm run build
 
-ENTRYPOINT [ "docker-entrypoint.sh" ]
+# Expose the port app runs on
+EXPOSE 8000
 
-ENV NODE_ENV development
-
-CMD ["npm", "run", "dev"]
-
-# Production build stage
-FROM common-build-stage as production-build-stage
-
-ENV NODE_ENV production
-
+# Command to run app
 CMD ["npm", "run", "start"]

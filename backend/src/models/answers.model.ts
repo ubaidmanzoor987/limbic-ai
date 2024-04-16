@@ -1,6 +1,5 @@
 import { Sequelize, DataTypes, Model, Optional, UUIDV4 } from "sequelize";
 import { IAnswers } from "@interfaces/answers.interface";
-import { QuestionsModel } from "./questions.model";
 
 export type AnswersCreationAttributes = Optional<
   IAnswers,
@@ -14,7 +13,7 @@ export class AnswersModal
   public id: string;
   public text: string;
   public questionId: string;
-  public userId: string;
+  public userId?: string;
 }
 
 export default function (sequelize: Sequelize): typeof AnswersModal {
@@ -34,7 +33,7 @@ export default function (sequelize: Sequelize): typeof AnswersModal {
         type: DataTypes.UUID,
       },
       userId: {
-        allowNull: false,
+        allowNull: true,
         type: DataTypes.UUID,
       },
     },

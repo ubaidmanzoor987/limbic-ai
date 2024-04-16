@@ -3,9 +3,12 @@ import { IQuestions } from "@/interfaces/questions.interface";
 
 class QuestionsService {
   private questions = DB.Questions;
+  private answers = DB.Answers;
 
   public async getAllQuestions(): Promise<IQuestions[]> {
-    return await this.questions.findAll();
+    return await this.questions.findAll({
+      order: [["createdAt", "DESC"]],
+    });
   }
 
   public async getQuestionById(id: string): Promise<IQuestions | null> {
@@ -27,6 +30,12 @@ class QuestionsService {
   }
 
   public async deleteQuestion(id: string): Promise<number> {
+    // delete all related answers
+    await this.answers.destroy({
+      where: {
+        questionId: id,
+      },
+    });
     return await this.questions.destroy({ where: { id } });
   }
 }

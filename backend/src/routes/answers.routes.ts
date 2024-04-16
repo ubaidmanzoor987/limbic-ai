@@ -19,7 +19,6 @@ import AnswersController from "@/controllers/answers.controller";
  *       required:
  *         - text
  *         - questionId
- *         - userId
  *       properties:
  *         id:
  *           type: string
@@ -95,6 +94,36 @@ class AnswersRoute implements Route {
 
     /**
      * @swagger
+     * /answers-by-question-id/{id}:
+     *   get:
+     *     summary: Returns the list of all answers by question id
+     *     tags: [Answers]
+     *     parameters:
+     *       - in: path
+     *         name: id
+     *         schema:
+     *           type: string
+     *         required: true
+     *         description: The ID of the question to retrieve its answers
+     *     responses:
+     *       200:
+     *         description: The list of answers
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 $ref: '#/components/schemas/Answer'
+     *       400:
+     *         description: Bad request
+     */
+    this.router.get(
+      `${this.path}-by-question-id/:id`,
+      this.answersController.getAllAnswersByQuestionId
+    );
+
+    /**
+     * @swagger
      * /answers:
      *   post:
      *     summary: Create a new answer
@@ -107,7 +136,6 @@ class AnswersRoute implements Route {
      *             type: object
      *             required:
      *               - text
-     *               - userId
      *               - questionId
      *             properties:
      *               text:
@@ -120,7 +148,7 @@ class AnswersRoute implements Route {
      *                 example: 11b1bbal-d9b5-48dd-b582-3ec04dc7d5dc
      *               userId:
      *                 type: string
-     *                 description: The id of the answer
+     *                 description: The id of the user
      *                 example: 11b1bbal-d9b5-48dd-b582-3ec04dl7d5dc
      *     responses:
      *       201:
@@ -202,10 +230,7 @@ class AnswersRoute implements Route {
      *         description: Bad request
      */
 
-    this.router.delete(
-      `${this.path}/:id`,
-      this.answersController.deleteAnswer
-    );
+    this.router.delete(`${this.path}/:id`, this.answersController.deleteAnswer);
   }
 }
 

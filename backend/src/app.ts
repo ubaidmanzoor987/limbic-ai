@@ -59,9 +59,9 @@ class App {
       definition: {
         openapi: "3.0.0",
         info: {
-          title: "Questionaire",
+          title: "Limbic Ai",
           version: "1.0.0",
-          description: "API documentation for Limbic Questionaire",
+          description: "API documentation for Limbic Ai",
         },
         servers: [
           {

@@ -8,11 +8,9 @@ export class CreateAnswerDto {
 
   @IsString()
   @IsNotEmpty()
-  userId: string;
-
-  @IsString()
-  @IsNotEmpty()
   questionId: string;
+
+  userId?: string;
 }
 
 // update-answer.dto.ts

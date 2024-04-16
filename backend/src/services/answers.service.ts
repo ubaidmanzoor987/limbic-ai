@@ -5,7 +5,15 @@ class AnswersService {
   private answers = DB.Answers;
 
   public async getAllAnswers(): Promise<IAnswers[]> {
-    return await this.answers.findAll();
+    return await this.answers.findAll({
+      order: [["createdAt", "DESC"]],
+      include: [
+        {
+          model: DB.Questions,
+          as: "question",
+        },
+      ],
+    });
   }
 
   public async getAnswerById(id: string): Promise<IAnswers | null> {
@@ -39,6 +47,23 @@ class AnswersService {
 
   public async deleteAnswer(id: string): Promise<number> {
     return await this.answers.destroy({ where: { id } });
+  }
+
+  public async getAllAnswersByQuestionsId(
+    questionId: string
+  ): Promise<IAnswers[]> {
+    return await this.answers.findAll({
+      where: {
+        questionId,
+      },
+      include: [
+        {
+          model: DB.Users,
+          as: "user",
+          attributes: ["id", "name"],
+        },
+      ],
+    });
   }
 }
 

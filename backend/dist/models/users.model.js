@@ -2,19 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserModel = void 0;
 const sequelize_1 = require("sequelize");
+const sequelize_2 = require("sequelize");
 class UserModel extends sequelize_1.Model {
 }
 exports.UserModel = UserModel;
 function default_1(sequelize) {
     UserModel.init({
         id: {
-            autoIncrement: true,
             primaryKey: true,
-            type: sequelize_1.DataTypes.INTEGER,
-        },
-        email: {
-            allowNull: false,
-            type: sequelize_1.DataTypes.STRING(45),
+            type: sequelize_1.DataTypes.UUID,
+            defaultValue: sequelize_2.UUIDV4,
         },
         name: {
             allowNull: true,

@@ -1,4 +1,4 @@
 export interface IQuestions {
-    id: number;
+    id: string;
     text: string;
 }

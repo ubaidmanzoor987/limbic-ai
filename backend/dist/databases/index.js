@@ -1,15 +1,12 @@
 "use strict";
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 const sequelize_1 = tslib_1.__importDefault(require("sequelize"));
-const users_model_1 = tslib_1.__importDefault(require("../models/users.model"));
-const questions_model_1 = tslib_1.__importDefault(require("../models/questions.model"));
-const host = process.env.DATABASE_HOST;
-const port = (_a = Number(process.env.DATABASE_PORT)) !== null && _a !== void 0 ? _a : 5432;
-const database = process.env.DATABASE_NAME;
-const user = process.env.DATABASE_USER;
-const password = process.env.DATABASE_PASSWORD;
+const configs_1 = require("@/configs");
+const users_model_1 = tslib_1.__importDefault(require("@models/users.model"));
+const questions_model_1 = tslib_1.__importDefault(require("@/models/questions.model"));
+const answers_model_1 = tslib_1.__importDefault(require("@/models/answers.model"));
+const { host, port, database, user, password } = (0, configs_1.getDbConfig)();
 const sequelize = new sequelize_1.default.Sequelize(database, user, password, {
     host,
     port,
@@ -37,11 +34,12 @@ sequelize.authenticate();
 const DB = {
     Users: (0, users_model_1.default)(sequelize),
     Questions: (0, questions_model_1.default)(sequelize),
+    Answers: (0, answers_model_1.default)(sequelize),
     sequelize,
     Sequelize: // connection instance (RAW queries)
     sequelize_1.default, // library
 };
-// DB.Answers.hasMany(DB.Questions, { foreignKey: 'question_id' });
-// DB.Answers.belongsTo(DB.Questions, { foreignKey: 'question_id', targetKey: 'id' });
+DB.Answers.belongsTo(DB.Questions, { foreignKey: 'question_id', targetKey: 'id', as: "question" });
+DB.Answers.belongsTo(DB.Users, { foreignKey: 'user_id', targetKey: 'id', as: "user" });
 exports.default = DB;
 //# sourceMappingURL=index.js.map

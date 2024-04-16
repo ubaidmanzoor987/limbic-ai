@@ -1,0 +1,120 @@
+.flex {
+  display: flex;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+body {
+  height: 100vh;
+}
+
+#__next {
+  height: 100%;
+}
+
+* {
+  font-family: "ArgentumSans", sans-serif;
+}
+
+.slider-class-testimonal {
+  column-gap: 2px;
+}
+
+.dots {
+  border: "1px solid red";
+}
+.custom-modal-portal {
+  border-radius: 10px;
+  position: absolute;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  top: 60%;
+  left: 55%;
+  width: 60%;
+  height: 60%;
+  transform: translate(-50%, -50%);
+  z-index: 1; /* Adjust z-index as needed */
+  outline: none;
+}
+
+.error-message {
+  color: red;
+  font-size: 12px !important;
+  margin-top: 0.2em;
+  width: 100%;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ml-10 {
+  margin-left: 10px;
+}
+
+.parent-dropdown {
+  width: 50%;
+  margin: "0 auto";
+}
+
+.select {
+  width: 100%;
+}
+
+.parent-dropdown .react-dropdown-select .react-dropdown-select-dropdown {
+  width: 100%;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.dropdown-items {
+  border-bottom: 1px solid #c3cad2;
+  width: 100%;
+  padding: 5px;
+}
+
+.dropdown-items:hover {
+  background-color: #bee6ff;
+}
+
+.dropdown-input {
+  margin-right: 10px;
+}
+
+.react-dropdown-select-input::placeholder {
+  font-size: 14px;
+  font-weight: 400;
+  color: #5c667099;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.alert-button{
+  color: black;
+  background-color: transparent;
+  border: 1px solid black;
+}
+
+.radio-labels{
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.image-box{
+  margin-bottom: 5px;
+}

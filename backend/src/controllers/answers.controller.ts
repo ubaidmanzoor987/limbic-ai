@@ -1,17 +1,14 @@
 import { Request, Response } from "express";
+import { validate } from "class-validator";
 
 import { IAnswers } from "@/interfaces/answers.interface";
 import AnswersService from "@/services/answers.service";
 import QuestionsService from "@/services/questions.service";
-import UsersService from "@/services/users.service";
 import { IQuestions } from "@/interfaces/questions.interface";
-import { IUsers } from "@/interfaces/users.interface";
 import { CreateAnswerDto, UpdateAnswerDto } from "@/dtos/answers.dto";
-import { validate } from "class-validator";
 
 class AnswersController {
   private answersService = new AnswersService();
-  private usersService = new UsersService();
   private questionsService = new QuestionsService();
 
   private validateQuestion = async (
@@ -26,23 +23,13 @@ class AnswersController {
     }
   };
 
-  private validateUser = async (userId: string): Promise<IUsers | null> => {
-    try {
-      const user = await this.usersService.getUserById(userId);
-      return user;
-    } catch (error) {
-      console.log("failed to get user", error.message);
-      throw new Error(`user with id ${userId} not found`);
-    }
-  };
-
   public getAllAnswers = async (req: Request, res: Response) => {
     try {
-      const questions = await this.answersService.getAllAnswers();
+      const answers = await this.answersService.getAllAnswers();
       res.status(200).json({
         message: "success",
         error: null,
-        data: questions,
+        data: answers,
       });
     } catch (error) {
       console.log("Error in getAllAnswers handler", error.message);
@@ -96,6 +83,8 @@ class AnswersController {
 
       const createAnswerDto = new CreateAnswerDto();
       createAnswerDto.text = answerData.text;
+      createAnswerDto.questionId = answerData.questionId;
+      createAnswerDto.userId = answerData?.userId;
 
       const errors = await validate(createAnswerDto);
       if (errors.length > 0) {
@@ -105,11 +94,8 @@ class AnswersController {
         return;
       }
 
-      // validating questionId and userId
-      await Promise.all([
-        this.validateQuestion(answerData.questionId),
-        this.validateUser(answerData.userId),
-      ]);
+      // validating questionId
+      await this.validateQuestion(answerData.questionId);
 
       const newAnswer = await this.answersService.createAnswer(answerData);
       res.status(201).json({
@@ -143,6 +129,7 @@ class AnswersController {
 
       const updateAnswerDto = new UpdateAnswerDto();
       updateAnswerDto.text = updatedData.text;
+      updateAnswerDto.questionId = updatedData.questionId;
 
       const errors = await validate(updateAnswerDto);
       if (errors.length > 0) {
@@ -152,13 +139,10 @@ class AnswersController {
         return;
       }
 
-      // validating questionId and userId
-      await Promise.all([
-        this.validateQuestion(updatedData.questionId),
-        this.validateUser(updatedData.userId),
-      ]);
+      // validating questionId
+      await this.validateQuestion(updatedData.questionId);
 
-      const updatedAnswer = await this.questionsService.updateQuestion(
+      const updatedAnswer = await this.answersService.updateAnswer(
         id,
         updatedData
       );
@@ -181,7 +165,7 @@ class AnswersController {
   public deleteAnswer = async (req: Request, res: Response) => {
     try {
       const id: string = req.params.id;
-      
+
       if (!id) {
         res.status(400).json({
           message: "Validation failed",
@@ -206,6 +190,36 @@ class AnswersController {
       }
     } catch (error) {
       console.log("Error in deleteAnswer handler", error.message);
+      res.status(400).json({
+        message: "failed",
+        error: error.message,
+        data: {},
+      });
+    }
+  };
+
+  public getAllAnswersByQuestionId = async (req: Request, res: Response) => {
+    try {
+      const id: string = req.params.id;
+      if (!id) {
+        res.status(400).json({
+          message: "Validation failed",
+          error: "Question id is required",
+          data: {},
+        });
+      }
+
+      // validating questionId
+      await this.validateQuestion(id);
+
+      const answers = await this.answersService.getAllAnswersByQuestionsId(id);
+      res.status(200).json({
+        message: "success",
+        error: null,
+        data: answers,
+      });
+    } catch (error) {
+      console.log("Error in getAllAnswersByQuestionId handler", error.message);
       res.status(400).json({
         message: "failed",
         error: error.message,
